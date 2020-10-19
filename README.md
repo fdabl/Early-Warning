@@ -1,5 +1,5 @@
 # Anticipating Critical Transitions using Early Warning Signals
-This repository contains code to reproduce all analyses and figures in Dablander, Pichler, Cika, & Bacilieri ([2020](https://psyarxiv.com/5wc28)). Anticipating Critical Transitions in Psychological Systems using Early Warning Signals: Theoretical and Pratical Considerations.
+This repository contains code to reproduce all analyses and figures in Dablander, Pichler, Cika, & Bacilieri ([2020](https://psyarxiv.com/5wc28)). Anticipating Critical Transitions in Psychological Systems using Early Warning Signals: Theoretical and Practical Considerations.
 
 The structure of this repository is as follows:
 
