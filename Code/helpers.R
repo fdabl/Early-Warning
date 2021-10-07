@@ -761,7 +761,7 @@ analyze_data_transitions <- function(
 #' @param dat data.frame given the AUC data
 #' @param ...
 #' @returns NULL
-create_rocplot <- function(dat, cex.axis = 1, cex.legend = 1, ...) {
+create_rocplot <- function(dat, cex.axis = 1, cex.legend = 1, xlab = '', ylab = '',...) {
   
   ews <- unique(dat$ews)
   noise <- unique(dat$noise)
@@ -777,7 +777,7 @@ create_rocplot <- function(dat, cex.axis = 1, cex.legend = 1, ...) {
   
   plot(
     0, 0, pch = 20, ylim = c(0, 1), xlim = c(0, 1),
-    axes = FALSE, xlab = 'False Positive Rate', ylab = 'True Positive Rate', cex = 0, ...
+    axes = FALSE, xlab = xlab, ylab = ylab, cex = 0, ...
   )
   
   axis(1, cex.axis = cex.axis)
@@ -799,7 +799,7 @@ create_rocplot <- function(dat, cex.axis = 1, cex.legend = 1, ...) {
     day <- 900 / (freq * 10)
     legend_names <- c(legend_names, ifelse(day < 10, paste0('  ', day, 'x Day'), paste0(day, 'x Day')))
     points(rocdat$fpr, rocdat$tpr, col = cols[l], pch = 20, cex = 1.50)
-    lines(rocdat$fpr, rocdat$tpr, col = cols[l], lty = l, lwd = 2)
+    lines(rocdat$fpr, rocdat$tpr, col = cols[l], lty = 1, lwd = 2)
     
     # colour the popular 2\sigma rule in black
     if (any(rocdat$sigma == 2)) {
@@ -812,7 +812,7 @@ create_rocplot <- function(dat, cex.axis = 1, cex.legend = 1, ...) {
       
   legend(
     'bottomright',
-    legend = legend_names, lty = c(1, 2, 3), lwd = 2,
+    legend = legend_names, lty = c(1, 1, 1), lwd = 2,
     col = cols[seq(l)], box.lty = 0, bty = 'n', cex = cex.legend
   )
 }

@@ -461,6 +461,7 @@ plot_graph <- function(mat, directed = FALSE, maximum = .8) {
 }
 
 
+## I further processe this in Adobe Illustrator
 pdf('Figures/Fig-3-Multidimensional-CSD.pdf', width = 12, height = 6)
 cols <- RColorBrewer::brewer.pal(n = 4, 'Set1')
 par(mfrow = c(2, 3))
@@ -521,17 +522,24 @@ dev.off()
 #### Figure 4: Example Time-series for Simulation Conditions ###
 ################################################################
 set.seed(1)
-lotka6 <- create_lotka_obj(nr_transition_days = 10, nr_baselinedays = 25, noisetype = 'additive', noise = 6)
-lotka8 <- create_lotka_obj(nr_transition_days = 20, nr_baselinedays = 50, noisetype = 'additive', noise = 8)
-lotka10 <- create_lotka_obj(nr_transition_days = 50, nr_baselinedays = 100, noisetype = 'additive', noise = 10)
+# lotka6 <- create_lotka_obj(nr_transition_days = 10, nr_baselinedays = 25, noisetype = 'additive', noise = 6)
+# lotka8 <- create_lotka_obj(nr_transition_days = 25, nr_baselinedays = 50, noisetype = 'additive', noise = 8)
+# lotka10 <- create_lotka_obj(nr_transition_days = 50, nr_baselinedays = 100, noisetype = 'additive', noise = 10)
+
+lotka6 <- create_lotka_obj(nr_transition_days = 25, nr_baselinedays = 50, noisetype = 'additive', noise = 10)
+lotka8 <- create_lotka_obj(nr_transition_days = 25, nr_baselinedays = 50, noisetype = 'additive', noise = 8)
+lotka10 <- create_lotka_obj(nr_transition_days = 25, nr_baselinedays = 50, noisetype = 'additive', noise = 6)
 
 lotka6s <- subsample(lotka6, freq = 90)
 lotka8s <- subsample(lotka8, freq = 180)
 lotka10s <- subsample(lotka10, freq = 900)
 
 xlabels1 <- c(0, 25, 35, 55)
-xlabels2 <- c(0, 25, 50, 70, 90)
+xlabels2 <- c(0, 25, 50, 75, 95)
 xlabels3 <- c(0, 50, 100, 150, 170)
+
+xlabels1 <- xlabels2
+xlabels3 <- xlabels2
 
 pdf('Figures/Fig-4-Example-Simulation-Runs.pdf', width = 12, height = 4)
 par(mfrow = c(1, 3))
@@ -541,15 +549,15 @@ ca <- 1.50
 lc <- 1.35
 plot_lotka_rs(
   lotka6s, xat = xlabels1 * 10, cex.main = cm, cex.lab = cl, cex.axis = ca, legend.cex = lc,
-  xlabels = xlabels1, main = expression('Sampling 10 x Day and ' ~ sigma[epsilon] ~ ' = 6')
+  xlabels = xlabels1, main = expression('Sampling 10 x Day and ' ~ sigma[epsilon] ~ ' = 10')
 )
 plot_lotka_rs(
-  lotka8s, xat = xlabels2 * 5, cex.main = cm, cex.lab = cl, cex.axis = ca, legend.cex = lc,
+  lotka8s, xat = xlabels1 * 5, cex.main = cm, cex.lab = cl, cex.axis = ca, legend.cex = lc,
   xlabels = xlabels2, main = expression('Sampling 5 x Day and ' ~ sigma[epsilon] ~ ' = 8')
 )
 plot_lotka_rs(
-  lotka10s, xat = xlabels3 * 1, cex.main = cm, cex.lab = cl, cex.axis = ca, legend.cex = lc,
-  xlabels = xlabels3, main = expression('Sampling 1 x Day and ' ~ sigma[epsilon] ~ ' = 10')
+  lotka10s, xat = xlabels1 * 1, cex.main = cm, cex.lab = cl, cex.axis = ca, legend.cex = lc,
+  xlabels = xlabels3, main = expression('Sampling 1 x Day and ' ~ sigma[epsilon] ~ ' = 6')
 )
 dev.off()
 
@@ -558,24 +566,36 @@ dev.off()
 ##################################################
 ##### Figure 5: ROC Curves Combined Indicator ####
 ##################################################
-
 # Too big for Github, please send an email if you
 # do not want to run all the simulations yourself
 datci <- read.csv('Simulation-Results/results-roc-combined-indicator.csv')
 
 # I made them nicer in Adobe Illustrator afterwards
-pdf('Figures/Fig-5-ROCs-Combined-Indicator.pdf', width = 12, height = 8)
+pdf('Figures/Fig-5-ROCs-Combined-Indicator.pdf', width = 10, height = 7)
 par(mfrow = c(2, 3))
 for (days in c(50, 25)) {
   for (nn in c(4, 6, 8)) {
+    
+    if (nn == 4) {
+      ylab <- 'True Positive Rate'
+    } else {
+      ylab = ''
+    }
+    
+    if (days == 25) {
+      xlab <- 'False Positive Rate'
+    } else {
+      xlab <- ''
+    }
+    
     main <- bquote(sigma[epsilon] ~ ' = ' ~ .(nn))
     create_rocplot(
       datci %>% 
         filter(
           noise == nn, nr_transition_days %in% c(NA, days),
           window_size_days == 50, nr_baselinedays == 100
-        ),
-      cex.main = 2, cex.lab = 1.50, cex.axis = ca, cex.legend = 1, main = main
+        ), ylab = ylab, xlab = xlab,
+      cex.main = 2.5, cex.lab = 1.50, cex.axis = ca, cex.legend = 1.25, main = main
     )
   }
 }
